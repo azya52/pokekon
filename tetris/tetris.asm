@@ -130,8 +130,9 @@ GAME_TYPE_A EQU 0x00
 GAME_TYPE_B EQU 0x01
 GAME_TYPE_S EQU 0x02
 
-F_SFX_BLOCK EQU 0x01
-F_HIDE_NEXT EQU 0x02
+F_SYS_SOUND_ROUTINE EQU 0x01
+F_SFX_BLOCK EQU 0x02
+F_HIDE_NEXT EQU 0x04
 F_INTT_JMP_4009 EQU 0x80
 
 
@@ -1608,8 +1609,8 @@ clearLinesPrepareBCSkip:
 
 
 levelUpSFX:
-    oriw wFlags, F_SFX_BLOCK
     lxi HL, levelUpSFXData
+    oriw wFlags, F_SFX_BLOCK
     jmp soundFX
 gameBWinSong:
     lxi HL, gameBWinData
