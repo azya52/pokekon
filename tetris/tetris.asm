@@ -671,7 +671,7 @@ gameBCompleteCountSingleStart:
 gameBCompleteCountSingleLoop:
     lxi DE, wScoresCountBCDL
     push BC
-addtLoop:
+gameBCompleteAdd:
     push HL
     ldax HL-
     addx DE
@@ -686,28 +686,28 @@ addtLoop:
     daa
     stax DE
     mvi A, 4
+    oniw wIndex, 0x01
     call drawDigitsSmall
-    mov A, E
-    nei A, (wScoresBCDL + 1) & 0xFF
-    jmp addtEnd
+    mov A, B
+    nei A, 59
+    jr gameBCompleteAddEnd
     pop HL
     lxi BC, 59 << 8 | 13
     lxi DE, wScoresBCDL
-    jmp addtLoop
-addtEnd:
-    di
+    jmp gameBCompleteAdd
+gameBCompleteAddEnd:
+    offiw wIndex, 0x01
+    jr gameBCompleteSkipBeep
     call writeLCDPlayfield
     lxi HL, pieceMoveSFXData
     shld wNoteSheetPtr
     aniw wNoteValue, 0
-    oniw wIndex, 0x01
-    ei
+gameBCompleteSkipBeep:
     pop HL
     pop BC
 gameBCompleteCountSingleLoopStart:
     dcrw wIndex
     jmp gameBCompleteCountSingleLoop
-    ei
     mov A, B
     lti A, 49
     ret
@@ -2125,7 +2125,7 @@ gameBDancefloor:
 gameBDancefloorEnd:
 
 dummySilentData:
-    db (16 << 4) & 0xF0 | 7, 16, 255
+    db (32 << 4) & 0xF0 | 7, 32, 255 ;195
     db 8, dummySilentData & 0xFF, (dummySilentData >> 8) & 0xFF
 
 titleThemeData:
